@@ -36,6 +36,4 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-task toto<<{
-    new ceylongradle.Foo(project)
- }
+new ceylongradle.Script(project).execute()
