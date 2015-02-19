@@ -1,14 +1,14 @@
 import org.ceylongradle.api {
     Project,
     TaskConfigurator,
-    SimpleTask
+    DefaultTask
 }
 
 shared abstract class AbstractScript(Project project) satisfies Project {
     
     shared formal void execute();
     
-    shared actual TaskType task<TaskType=SimpleTask>(String name, 
+    shared actual TaskType task<TaskType=DefaultTask>(String name, 
         TaskConfigurator<TaskType>? taskAction)
             => project.task(name, taskAction);
     

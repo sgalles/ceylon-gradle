@@ -3,7 +3,9 @@ import org.ceylongradle {
 }
 import org.ceylongradle.api {
     Project,
-    SimpleTask,
+    DefaultTask
+}
+import org.ceylongradle.api.tasks.bundling {
     Zip
 }
 
@@ -14,7 +16,7 @@ shared  class Script(Project project) extends AbstractScript(project){
     
     shared actual void execute() {     
         
-        task<SimpleTask>("sayHello").doLast(void(t) {
+        task<DefaultTask>("sayHello").doLast(void(t) {
             print("Hello from Ceylon !");
         });
         
@@ -27,7 +29,9 @@ shared  class Script(Project project) extends AbstractScript(project){
         
                  
     }
-    
+ 
+   
+  
     
 }
 
