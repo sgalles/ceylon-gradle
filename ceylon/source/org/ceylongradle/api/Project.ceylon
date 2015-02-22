@@ -1,12 +1,7 @@
 
 shared interface Project {
     
-    //shared formal TaskType task<TaskType>(String name, TaskConfigurator<TaskType>? taskAction = null);
-    
-     shared formal Task task(String name);  
-    
-     shared formal Task taskAdd(Task task);        
-    
+     shared formal Task task(String|Task task);  
    
    
 }

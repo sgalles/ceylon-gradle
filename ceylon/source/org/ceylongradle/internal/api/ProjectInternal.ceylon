@@ -21,16 +21,16 @@ import org.gradle.api.tasks.bundling {
     GZip=Zip
 }
 shared class ProjectInternal(shared GProject gproject) satisfies Project{
-    shared actual Task task(String name){
-        value task = DefaultTask(name);
+    shared actual Task task(String|Task t){
+      
+        value [Task task,String name] = switch(t) 
+                    case(is String) [DefaultTask(t),t]
+                    case(is Task) [t, t.name];
+        
         value gtask = createAndAdd(name, task);
         return task;
     }
     
-    shared actual Task taskAdd(Task t){
-        
-        return nothing;
-    }
     
     void add(Task task){
        

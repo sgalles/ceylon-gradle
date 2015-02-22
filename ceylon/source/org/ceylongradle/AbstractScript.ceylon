@@ -16,9 +16,8 @@ shared abstract class AbstractScript(Object gProject) satisfies Project {
     shared Project project = ProjectInternal(gProject);
     shared formal void execute();
     
-    task(String name) => project.task(name);
+    task(String|Task t) => project.task(t);
     
-    taskAdd(Task t) => project.taskAdd(t);
     
     //shared actual TaskType task<TaskType=DefaultTask>(String name, 
     //    TaskConfigurator<TaskType>? taskAction)

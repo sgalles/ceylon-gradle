@@ -14,7 +14,7 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     
     shared actual void execute() {     
         
-        taskAdd(Zip("myzip"));
+        task(Zip("myzip"));
         
         task("mytask").doLast(void(task) {
             print("Hello from Ceylon !");
