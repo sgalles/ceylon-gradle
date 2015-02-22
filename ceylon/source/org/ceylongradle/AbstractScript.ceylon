@@ -1,17 +1,35 @@
 import org.ceylongradle.api {
     Project,
-    TaskConfigurator,
+    Task,
+    TaskAction,
     DefaultTask
 }
+import org.ceylongradle.internal.api {
+    ProjectInternal
+}
+import org.gradle.api {
+    GProject=Project
+}
 
-shared abstract class AbstractScript(Project project) satisfies Project {
-    
+shared abstract class AbstractScript(Object gProject) satisfies Project {
+    assert(is GProject gProject);
+    shared Project project = ProjectInternal(gProject);
     shared formal void execute();
     
-    shared actual TaskType task<TaskType=DefaultTask>(String name, 
-        TaskConfigurator<TaskType>? taskAction)
-            => project.task(name, taskAction);
+    task(String name) => project.task(name);
     
+    taskAdd(Task t) => project.taskAdd(t);
+    
+    //shared actual TaskType task<TaskType=DefaultTask>(String name, 
+    //    TaskConfigurator<TaskType>? taskAction)
+    //        => project.task(name, taskAction);
+    //
+
+    
+    /*shared object task2{
+        
+    }*/
+    //
     //shared alias TaskAction<TaskType> => Anything(TaskType);
     //
     //shared TaskType task<TaskType = Task>(String name, TaskAction<TaskType>? taskAction = null)
