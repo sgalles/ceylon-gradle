@@ -22,8 +22,8 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
         Task task = switch(t) 
                     case(is String) SimpleTask(t)
                     case(is Task) t;
-        assert(is Bridge bridge = task.bridge);
-        value gtask = bridge.createAndAdd(this);
+        assert(is Bridge<GTask> bridge = task.bridge);
+        bridge.createAndAdd(this);
         return task;
     }
     

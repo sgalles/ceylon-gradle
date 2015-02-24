@@ -1,8 +1,11 @@
 import org.gradle.api {
     GTask=Task
 }
-shared interface Bridge {
+shared abstract class Bridge<out GTaskType>() given GTaskType satisfies GTask{
     
-    shared formal GTask createAndAdd(ProjectInternal project);
+    shared formal String name;
+    
+    shared void createAndAdd(ProjectInternal project)
+        => project.createAndAdd<GTaskType>(name);
     
 }
