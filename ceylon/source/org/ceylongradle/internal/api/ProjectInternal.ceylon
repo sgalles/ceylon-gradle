@@ -2,16 +2,12 @@ import ceylon.interop.java {
     javaClass
 }
 
-import java.lang {
-    Class
-}
-
 import org.ceylongradle.api {
     Project,
     Task,
-    TaskAction,
     DefaultTask,
-    Zip
+    Zip,
+    SimpleTask
 }
 import org.gradle.api {
     GProject=Project,
@@ -23,11 +19,11 @@ import org.gradle.api.tasks.bundling {
 shared class ProjectInternal(shared GProject gproject) satisfies Project{
     shared actual Task task(String|Task t){
       
-        value [Task task,String name] = switch(t) 
-                    case(is String) [DefaultTask(t),t]
-                    case(is Task) [t, t.name];
-        
-        value gtask = createAndAdd(name, task);
+        Task task = switch(t) 
+                    case(is String) SimpleTask(t)
+                    case(is Task) t;
+        assert(is Bridge bridge = task.bridge);
+        value gtask = bridge.createAndAdd(this);
         return task;
     }
     
@@ -38,17 +34,10 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
     
 
     
-    GTask createAndAdd(String name, Task task) {
-        
-        GTaskType gcreateAndAdd<GTaskType>() 
-                given GTaskType satisfies GTask
-                    => gproject.tasks.create<GTaskType>(name, javaClass<GTaskType>());
+    suppressWarnings("expressionTypeNothing")
+    shared GTask createAndAdd<GTaskType>(String name) given GTaskType satisfies GTask=> gproject.tasks.create<GTaskType>(name, javaClass<GTaskType>());
     
-         return if(is Zip task) then gcreateAndAdd<GZip>() 
-                else if(is DefaultTask task) then gcreateAndAdd<GTask>()
-                else nothing;
-        
-    }
+    
     
     //shared TaskType task<TaskType = Task>(String name, TaskAction<TaskType>? taskAction = null)
     //        given TaskType satisfies Task {

@@ -8,6 +8,8 @@ shared interface Task {
     
     shared formal Task doLast(TaskAction<Task> action);
     
+    shared formal Object bridge;
+    
 }
 
 
