@@ -11,31 +11,44 @@ import org.gradle.api {
 import org.gradle.api.tasks.bundling {
     GZip=Zip
 }
+import ceylon.interop.java {
+
+    javaString
+}
 
 
 shared interface Project {
     
     shared formal Task task(String|Task task);
     
-    void addRegistrationInternal<GTaskType>(Task task, String  name) 
+    void addRegistrationInternal<GTaskType>(Task task, String  name, void configure(GTaskType gtask)) 
             given GTaskType satisfies GTask{
-        projectInternal(this).addRegistration<GTaskType>(task, name);
+        projectInternal(this).addRegistration<GTaskType>(task, name, configure);
     }
     
     shared class SimpleTask(String name) extends DefaultTask(name) {
         
         // register
         late Task self;
-        addRegistrationInternal<GTask>(self = this, name);
+        addRegistrationInternal<GTask>(self = this, name, noop);
     }
     
-    shared class Zip(name, baseName) extends DefaultTask(name) {
+    shared class Zip(name, baseName, from = null) extends DefaultTask(name) {
         String name;
+        shared String? from;
         shared String baseName;
         
+        
         //register
+       
+        void configure(GZip gtask){
+            gtask.baseName = baseName;
+            if(exists from) {
+                gtask.from(javaString(from));
+            }
+        }
         late Task self;
-        addRegistrationInternal<GZip>(self = this, name);
+        addRegistrationInternal<GZip>(self = this, name, configure);
     }
     
     shared abstract class DefaultTask(name) satisfies Task {

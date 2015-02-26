@@ -9,12 +9,13 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     
     shared actual void execute() {     
         
-        /*task{
+        task{
             Zip{
                 name= "myzip";
                 baseName = "mybasename";
+                from = "ceylon";
             };
-        };*/
+        };
         
         task("mytask").doLast(void(task) {
             print("Hello from Ceylon !");

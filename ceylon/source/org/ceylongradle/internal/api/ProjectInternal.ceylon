@@ -26,10 +26,10 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
         return task;
     }
     
-    shared void addRegistration<GTaskType>(Task task, String  name)
+    shared void addRegistration<GTaskType>(Task task, String  name, void configure(GTaskType gtask))
             given GTaskType satisfies GTask{
         void registration(){
-            createAndAdd<GTaskType>(name);
+            configure(createAndAdd<GTaskType>(name));
         }
         taskRegistrations.put(task, registration);
     }
