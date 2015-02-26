@@ -1,11 +1,6 @@
 import org.ceylongradle {
     AbstractScript
 }
-import org.ceylongradle.api {
-    Project,
-    Zip,
-    DefaultTask
-}
 
 
 shared  class Script(Object gProject) extends AbstractScript(gProject){
@@ -14,7 +9,12 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     
     shared actual void execute() {     
         
-        task(Zip("myzip"));
+        /*task{
+            Zip{
+                name= "myzip";
+                baseName = "mybasename";
+            };
+        };*/
         
         task("mytask").doLast(void(task) {
             print("Hello from Ceylon !");

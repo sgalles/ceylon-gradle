@@ -1,41 +1,42 @@
+import ceylon.collection {
+    IdentityMap
+}
 import ceylon.interop.java {
     javaClass
 }
 
 import org.ceylongradle.api {
     Project,
-    Task,
-    DefaultTask,
-    Zip,
-    SimpleTask
+    Task
 }
 import org.gradle.api {
     GProject=Project,
     GTask=Task
 }
-import org.gradle.api.tasks.bundling {
-    GZip=Zip
-}
 shared class ProjectInternal(shared GProject gproject) satisfies Project{
+    IdentityMap<Task,Anything()> taskRegistrations = IdentityMap<Task,Anything()>();
+    
     shared actual Task task(String|Task t){
-      
+       
         Task task = switch(t) 
                     case(is String) SimpleTask(t)
                     case(is Task) t;
-        assert(is Bridge<GTask> bridge = task.bridge);
-        bridge.createAndAdd(this);
+        assert(exists registration = taskRegistrations[task]);
+        registration();
         return task;
     }
     
-    
-    void add(Task task){
-       
+    shared void addRegistration<GTaskType>(Task task, String  name)
+            given GTaskType satisfies GTask{
+        void registration(){
+            createAndAdd<GTaskType>(name);
+        }
+        taskRegistrations.put(task, registration);
     }
     
-
-    
-    suppressWarnings("expressionTypeNothing")
-    shared GTask createAndAdd<GTaskType>(String name) given GTaskType satisfies GTask=> gproject.tasks.create<GTaskType>(name, javaClass<GTaskType>());
+    GTaskType createAndAdd<GTaskType>(String name) 
+            given GTaskType satisfies GTask
+            => gproject.tasks.create<GTaskType>(name, javaClass<GTaskType>());
     
     
     

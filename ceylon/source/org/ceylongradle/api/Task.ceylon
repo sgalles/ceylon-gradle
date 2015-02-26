@@ -1,14 +1,13 @@
-shared alias TaskConfigurator<TaskType> => Anything(TaskType);
 
-shared alias TaskAction<TaskType> => Anything(TaskType);
 
-shared interface Task {
+shared alias Action<TaskType> => Anything(TaskType);
+
+shared interface Task satisfies Identifiable{
     
     shared formal String name;
     
-    shared formal Task doLast(TaskAction<Task> action);
-    
-    shared formal Object bridge;
+    shared formal Task doLast(Action<Task> action);
+  
     
 }
 

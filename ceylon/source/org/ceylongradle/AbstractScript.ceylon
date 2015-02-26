@@ -1,8 +1,6 @@
 import org.ceylongradle.api {
     Project,
-    Task,
-    TaskAction,
-    DefaultTask
+    Task
 }
 import org.ceylongradle.internal.api {
     ProjectInternal

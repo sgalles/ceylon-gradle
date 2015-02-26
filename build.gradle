@@ -9,7 +9,7 @@
  
 buildscript {    
     dependencies {
-       classpath files('ceylon.bat classpath ceylongradle/1.0.0'.execute(null,file('ceylon')).text.split(System.properties['path.separator']))
+       classpath files('ceylon.bat classpath script/1.0.0'.execute(null,file('ceylon')).text.split(System.properties['path.separator']))
     }
 }
 
@@ -36,4 +36,4 @@ dependencies {
     testCompile 'junit:junit:4.11'
 }
 
-new ceylongradle.Script(project).execute()
+new script.Script(project).execute()
