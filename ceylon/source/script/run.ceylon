@@ -9,6 +9,7 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     
     shared actual void execute() {     
         
+        
         task{
             Zip{
                 name= "myzip";
@@ -16,6 +17,7 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
                 from = "ceylon";
             };
         };
+        
         
         task("mytask").doLast(void(task) {
             print("Hello from Ceylon !");
