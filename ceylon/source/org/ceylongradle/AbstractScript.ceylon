@@ -10,11 +10,21 @@ import org.gradle.api {
 }
 
 shared abstract class AbstractScript(Object gProject) satisfies Project {
+    
+    shared Project project;
+    
     assert(is GProject gProject);
-    shared Project project = ProjectInternal(gProject);
+    value prjInt = ProjectInternal(gProject);
+    prjInt.task = prjInt.TaskHolder();
+    project = prjInt;
+    
+    shared actual TaskHolder task {
+        return project.task;
+    }
+    
     shared formal void execute();
     
-    task(String|Task t) => project.task(t);
+    //task(String|Task t) => project.task(t);
     
     
     //shared actual TaskType task<TaskType=DefaultTask>(String name, 

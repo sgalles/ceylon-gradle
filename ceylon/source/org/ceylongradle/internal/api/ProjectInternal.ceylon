@@ -14,24 +14,14 @@ import org.gradle.api {
     GTask=Task
 }
 shared class ProjectInternal(shared GProject gproject) satisfies Project{
-    IdentityMap<Task,Anything()> taskRegistrations = IdentityMap<Task,Anything()>();
+   
     
-    shared actual Task task(String|Task t){
-       
-        Task task = switch(t) 
-                    case(is String) SimpleTask(t)
-                    case(is Task) t;
-        assert(exists registration = taskRegistrations[task]);
-        registration();
-        return task;
-    }
+    shared actual late TaskHolder task;
     
-    shared void addRegistration<GTaskType>(Task task, String  name, void configure(GTaskType gtask))
+    
+    shared void addRegistration<GTaskType>(String  name, void configure(GTaskType gtask))
             given GTaskType satisfies GTask{
-        void registration(){
-            configure(createAndAdd<GTaskType>(name));
-        }
-        taskRegistrations.put(task, registration);
+        configure(createAndAdd<GTaskType>(name));
     }
     
     GTaskType createAndAdd<GTaskType>(String name) 
