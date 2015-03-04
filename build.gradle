@@ -9,7 +9,8 @@
  
 buildscript {    
     dependencies {
-       classpath files('ceylon.bat classpath script/1.0.0'.execute(null,file('ceylon')).text.split(System.properties['path.separator']))
+       def batOrSh = ( System.properties['file.separator'] == '\\' ? 'bat' : 'sh' )
+       classpath files("ceylon.$batOrSh classpath script/1.0.0".execute(null,file('ceylon')).text.split(System.properties['path.separator']))
     }
 }
 
