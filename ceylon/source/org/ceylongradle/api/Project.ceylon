@@ -26,20 +26,16 @@ shared interface Project {
         projectInternal(this).addRegistration<GTaskType>(name, configure);
     }
     
-    suppressWarnings("expressionTypeNothing")
+    // this works
     GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
-        GTaskType gt = Transtyper.transtype(projectInternal(this).gproject.tasks.getByName(task.name)) ;
-        //assert(is GTaskType gt); 
-        return gt;
-        
+        return Transtyper.transtype<GTaskType>(projectInternal(this).gproject.tasks.getByName(task.name)) ;
     }
     
-    //suppressWarnings("expressionTypeNothing")
+    // This does not work
     /*GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
         GTask gt = projectInternal(this).gproject.tasks.getByName(task.name);
         assert(is GTaskType gt); 
-        return gt;
-        
+        return gt;    
     }*/
         
     
