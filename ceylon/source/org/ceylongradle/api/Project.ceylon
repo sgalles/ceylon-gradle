@@ -27,9 +27,20 @@ shared interface Project {
     }
     
     suppressWarnings("expressionTypeNothing")
-    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask =>
-        if(is GTaskType gt = projectInternal(this).gproject.tasks.getByName(task.name)) 
-            then gt else nothing;
+    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
+        GTaskType gt = Transtyper.transtype(projectInternal(this).gproject.tasks.getByName(task.name)) ;
+        //assert(is GTaskType gt); 
+        return gt;
+        
+    }
+    
+    //suppressWarnings("expressionTypeNothing")
+    /*GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
+        GTask gt = projectInternal(this).gproject.tasks.getByName(task.name);
+        assert(is GTaskType gt); 
+        return gt;
+        
+    }*/
         
     
     shared class TaskHolder(){

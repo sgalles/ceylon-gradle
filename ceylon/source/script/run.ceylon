@@ -15,7 +15,7 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
             baseName = "mybasename";
             from = "ceylon";
         };
-        //z.baseName = "mybasename2";
+        z.baseName = "mybasename2";
         
         task.Simple{
             name = "mytask";
