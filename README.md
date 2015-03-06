@@ -10,5 +10,5 @@ The directories in the source tree are :
 To execute the Gradle script :
 * You need Gradle in your PATH
 * You must import this [Gradle fatjar](http://stephane.galles.free.fr/ceylon/misc/tests/gradleall-2.2.1.jar) in your Ceylon repos as `gradleall/2.2.1`
-* compile the ceylon project in `ceylon` directory (via the Ceylon CLI or IDE)
+* compile the ceylon project located in `ceylon` directory (via the Ceylon CLI `ceylon compile` or import the Ceylon project in the Ceylon IDE)
 * in the root directory try to run `gradle mytask` to execute one task define in `ceylon/source/script`
