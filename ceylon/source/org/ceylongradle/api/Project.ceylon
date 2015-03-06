@@ -28,7 +28,7 @@ shared interface Project {
     
     // this works
     GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
-        return Transtyper.transtype<GTaskType>(projectInternal(this).gproject.tasks.getByName(task.name)) ;
+        return HiddedCast.transtype<GTaskType>(projectInternal(this).gproject.tasks.getByName(task.name)) ;
     }
     
     // This does not work
