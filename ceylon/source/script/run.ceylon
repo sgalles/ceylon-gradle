@@ -10,12 +10,13 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     shared actual void execute() {     
         
         
+        
         value z = task.Zip{
             name= "myzip";
             baseName = "mybasename";
             from = "ceylon";
         };
-        z.baseName = "mybasename2";
+        z.baseName = "mybasename3";
         
         task.Simple{
             name = "mytask";
@@ -25,9 +26,6 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
         
                  
     }
- 
-   
-  
     
 }
 

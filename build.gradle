@@ -2,15 +2,23 @@
 // add Ceylon module to Gradle classpath
 buildscript {    
     dependencies {
-    
-       def module = 'script/1.0.0'
+       project.ext.moduleName = 'script'
+       project.ext.moduleVersion = '1.0.0'
+       def module = "$project.moduleName/$project.moduleVersion"
        def subDir = file('ceylon')
        def sep = System.properties['path.separator']
        def batOrSh = ( sep == ';' ? 'bat' : 'sh' )
-       
-       classpath files("ceylon.$batOrSh classpath $module".execute(null,subDir).text.split(sep))
+       def classpathString = "ceylon.$batOrSh classpath $module".execute(null,subDir).text
+       // init Gradle classpath
+       classpath files(classpathString.split(sep))
+       System.properties['java.class.path'] += "$sep$classpathString"
     }
 }
 
 // execute Ceylon script
+com.redhat.ceylon.compiler.java.runtime.Main.setupMetamodel(moduleName, moduleVersion)
 new script.Script(project).execute()
+
+
+
+

@@ -1,6 +1,5 @@
 import org.ceylongradle.api {
-    Project,
-    Task
+    Project
 }
 import org.ceylongradle.internal.api {
     ProjectInternal
@@ -10,7 +9,7 @@ import org.gradle.api {
 }
 
 shared abstract class AbstractScript(Object gProject) satisfies Project {
-    
+   
     shared Project project;
     
     assert(is GProject gProject);

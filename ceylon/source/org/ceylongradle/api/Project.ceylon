@@ -1,3 +1,7 @@
+import ceylon.interop.java {
+    javaString
+}
+
 import org.ceylongradle {
     AbstractScript
 }
@@ -11,10 +15,6 @@ import org.gradle.api {
 import org.gradle.api.tasks.bundling {
     GZip=Zip
 }
-import ceylon.interop.java {
-
-    javaString
-}
 
 
 shared interface Project {
@@ -27,16 +27,16 @@ shared interface Project {
     }
     
     // this works
-    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
+    /*GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
         return HiddenCast.cast<GTaskType>(projectInternal(this).gproject.tasks.getByName(task.name)) ;
-    }
+    }*/
     
     // This does not work
-    /*GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
+    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
         GTask gt = projectInternal(this).gproject.tasks.getByName(task.name);
         assert(is GTaskType gt); 
         return gt;    
-    }*/
+    }
         
     
     shared class TaskHolder(){
@@ -49,7 +49,6 @@ shared interface Project {
             
             shared class Zip extends DefaultTask {
                 
-                late Task self;
                 shared new Zip(String name, String baseName, String? from = null) extends DefaultTask(name){
                     void configure(GZip gtask){
                         gtask.baseName = baseName;
