@@ -1,13 +1,17 @@
-import ceylon.collection {
-    IdentityMap
+import ceylon.file {
+    Path,
+    parsePath
 }
 import ceylon.interop.java {
     javaClass
 }
 
+import java.io {
+    JFile=File
+}
+
 import org.ceylongradle.api {
-    Project,
-    Task
+    Project
 }
 import org.gradle.api {
     GProject=Project,
@@ -18,6 +22,7 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
     
     shared actual late TaskHolder task;
     
+    shared actual Path buildDir => parsePath(gproject.buildDir.string);
     
     shared void addRegistration<GTaskType>(String  name, void configure(GTaskType gtask))
             given GTaskType satisfies GTask{
@@ -28,16 +33,11 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
             given GTaskType satisfies GTask
             => gproject.tasks.create<GTaskType>(name, javaClass<GTaskType>());
     
-    
-    
-    //shared TaskType task<TaskType = Task>(String name, TaskAction<TaskType>? taskAction = null)
-    //        given TaskType satisfies Task {
-    //    value type = javaClass<TaskType>();
-    //    return if (exists taskAction)
-    //            then project.tasks.create<TaskType>(name, type, object satisfies Action<TaskType> {
-    //            execute(TaskType t) => taskAction(t);
-    //        })
-    //            else project.tasks.create<TaskType>(name, type);
-    //}
-    
+       
 }
+
+shared JFile toFile(String|Path path)
+    => switch(path)
+       case(is String) JFile(path)
+       case(is Path) JFile(path.string);
+

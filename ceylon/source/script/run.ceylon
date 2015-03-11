@@ -13,8 +13,8 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
         
         value z = task.Zip{
             name= "myzip";
-            baseName = "mybasename";
             from = "ceylon";
+            destinationDir = buildDir;
         };
         z.baseName = "mybasename3";
         

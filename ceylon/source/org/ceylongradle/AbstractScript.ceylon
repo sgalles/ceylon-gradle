@@ -7,6 +7,10 @@ import org.ceylongradle.internal.api {
 import org.gradle.api {
     GProject=Project
 }
+import ceylon.file {
+
+    Path
+}
 
 shared abstract class AbstractScript(Object gProject) satisfies Project {
    
@@ -17,10 +21,15 @@ shared abstract class AbstractScript(Object gProject) satisfies Project {
     prjInt.task = prjInt.TaskHolder();
     project = prjInt;
     
+    shared formal void execute();
+    
     shared actual TaskHolder task {
         return project.task;
     }
     
-    shared formal void execute();
+    //task => project.task;
+    
+    buildDir => project.buildDir;
+    
    
 }

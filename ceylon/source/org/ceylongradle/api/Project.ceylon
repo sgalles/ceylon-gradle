@@ -1,12 +1,13 @@
-import ceylon.interop.java {
-    javaString
+import ceylon.file {
+    Path
 }
 
 import org.ceylongradle {
     AbstractScript
 }
 import org.ceylongradle.internal.api {
-    ProjectInternal
+    ProjectInternal,
+    toFile
 }
 import org.gradle.api {
     GTask=Task,
@@ -17,27 +18,23 @@ import org.gradle.api.tasks.bundling {
 }
 
 
+
 shared interface Project {
     
     shared formal TaskHolder task;
+    
+    shared formal Path buildDir;
     
     void addRegistrationInternal<GTaskType>(String  name, void configure(GTaskType gtask)) 
             given GTaskType satisfies GTask{
         projectInternal(this).addRegistration<GTaskType>(name, configure);
     }
     
-    // this works
-    /*GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
-        return HiddenCast.cast<GTaskType>(projectInternal(this).gproject.tasks.getByName(task.name)) ;
-    }*/
-    
-    // This does not work
-    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask {
-        GTask gt = projectInternal(this).gproject.tasks.getByName(task.name);
-        assert(is GTaskType gt); 
-        return gt;    
-    }
-        
+
+    GTaskType matchingGTask<GTaskType>(Task task)  given GTaskType satisfies GTask 
+        => if(is GTaskType gt = projectInternal(this).gproject.tasks.getByName(task.name)) 
+           then gt else nothing;
+           
     
     shared class TaskHolder(){
             
@@ -49,11 +46,23 @@ shared interface Project {
             
             shared class Zip extends DefaultTask {
                 
-                shared new Zip(String name, String baseName, String? from = null) extends DefaultTask(name){
+                shared new Zip(
+                    String name, 
+                    String|Path from, 
+                    String? baseName = null, 
+                    String|Path? into = null,
+                    String|Path? destinationDir = null
+                ) extends DefaultTask(name){
                     void configure(GZip gtask){
-                        gtask.baseName = baseName;
-                        if(exists from) {
-                            gtask.from(javaString(from));
+                        if(exists baseName){
+                            gtask.baseName = baseName;
+                        }
+                        gtask.from(toFile(from));
+                        if(exists into) {
+                            gtask.into(toFile(into));
+                        }
+                        if(exists destinationDir) {
+                            gtask.destinationDir = toFile(destinationDir);
                         }
                     }
                     addRegistrationInternal<GZip>(name, configure);
