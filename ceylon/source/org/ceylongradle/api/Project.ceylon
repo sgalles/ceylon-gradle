@@ -7,7 +7,7 @@ import org.ceylongradle {
 }
 import org.ceylongradle.internal.api {
     ProjectInternal,
-    toFile
+    toJFile
 }
 import org.gradle.api {
     GTask=Task,
@@ -18,12 +18,16 @@ import org.gradle.api.tasks.bundling {
 }
 
 
+shared alias BasicPathSource => String|Path;
+shared alias PathSource => BasicPathSource|BasicPathSource();
 
 shared interface Project {
     
     shared formal TaskHolder task;
     
     shared formal Path buildDir;
+    
+    shared formal Path file(PathSource path);
     
     void addRegistrationInternal<GTaskType>(String  name, void configure(GTaskType gtask)) 
             given GTaskType satisfies GTask{
@@ -48,21 +52,21 @@ shared interface Project {
                 
                 shared new Zip(
                     String name, 
-                    String|Path from, 
+                    PathSource from, 
                     String? baseName = null, 
-                    String|Path? into = null,
-                    String|Path? destinationDir = null
+                    PathSource? into = null,
+                    PathSource? destinationDir = null
                 ) extends DefaultTask(name){
                     void configure(GZip gtask){
                         if(exists baseName){
                             gtask.baseName = baseName;
                         }
-                        gtask.from(toFile(from));
+                        gtask.from(toJFile(from));
                         if(exists into) {
-                            gtask.into(toFile(into));
+                            gtask.into(toJFile(into));
                         }
                         if(exists destinationDir) {
-                            gtask.destinationDir = toFile(destinationDir);
+                            gtask.destinationDir = toJFile(destinationDir);
                         }
                     }
                     addRegistrationInternal<GZip>(name, configure);

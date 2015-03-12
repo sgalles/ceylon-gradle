@@ -11,7 +11,9 @@ import java.io {
 }
 
 import org.ceylongradle.api {
-    Project
+    Project,
+    PathSource,
+    BasicPathSource
 }
 import org.gradle.api {
     GProject=Project,
@@ -22,7 +24,9 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
     
     shared actual late TaskHolder task;
     
-    shared actual Path buildDir => parsePath(gproject.buildDir.string);
+    buildDir => toPath(gproject.buildDir);
+    
+    file(PathSource path) => toPath(gproject.file(toJFile(path)));
     
     shared void addRegistration<GTaskType>(String  name, void configure(GTaskType gtask))
             given GTaskType satisfies GTask{
@@ -36,8 +40,13 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
        
 }
 
-shared JFile toFile(String|Path path)
+shared Path toPath(PathSource|JFile path)
     => switch(path)
-       case(is String) JFile(path)
-       case(is Path) JFile(path.string);
+       case(is String) parsePath(path)
+       case(is Path) path
+       else if(is JFile path) then  parsePath(path.string) 
+            else let(computedPath = path()) toPath(computedPath);
+       
+
+shared JFile toJFile(PathSource path) => JFile(toPath(path).string);
 

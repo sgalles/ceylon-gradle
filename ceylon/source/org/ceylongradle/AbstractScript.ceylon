@@ -1,15 +1,12 @@
 import org.ceylongradle.api {
-    Project
+    Project,
+    PathSource
 }
 import org.ceylongradle.internal.api {
     ProjectInternal
 }
 import org.gradle.api {
     GProject=Project
-}
-import ceylon.file {
-
-    Path
 }
 
 shared abstract class AbstractScript(Object gProject) satisfies Project {
@@ -23,13 +20,9 @@ shared abstract class AbstractScript(Object gProject) satisfies Project {
     
     shared formal void execute();
     
-    shared actual TaskHolder task {
-        return project.task;
-    }
-    
-    //task => project.task;
+    task => project.task;
     
     buildDir => project.buildDir;
     
-   
+    file(PathSource path) => project.file(path);
 }
