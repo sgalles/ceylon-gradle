@@ -1,5 +1,7 @@
 This is an experiment to use Ceylon to write Gradle scripts.
 
+The Ceylon-Gradle script is [here](https://github.com/sgalles/ceylon-gradle/blob/master/ceylon/source/script/run.ceylon)
+
 The directories in the source tree are :
 * `ceylon` A Ceylon project with :
 * `ceylon/source/script` the Gradle script written in Ceylon
