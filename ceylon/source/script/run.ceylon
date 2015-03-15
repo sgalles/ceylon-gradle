@@ -14,7 +14,7 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
         
         value z = task.Zip{
             name= "myzip";
-            from = files(["ceylon","src"]); // use varargs
+            from = files("ceylon","settings.gradle"); 
             destinationDir = file("``buildDir``/distribution");
         };
         z.baseName = "mybasename3";

@@ -39,7 +39,7 @@ shared interface Project {
     shared formal Path file(PathSource path); 
     
     // ici FileCollection not imported => bug
-    shared formal FileCollection files(MultiPathSource paths);
+    shared formal FileCollection files(MultiPathSource* paths);
     
     void addRegistrationInternal<GTaskType>(String  name, void configure(GTaskType gtask)) 
             given GTaskType satisfies GTask{

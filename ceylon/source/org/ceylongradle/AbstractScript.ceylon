@@ -27,5 +27,5 @@ shared abstract class AbstractScript(Object gProject) satisfies Project {
     
     file(PathSource path) => project.file(path);
     
-    files(MultiPathSource paths) => project.files(paths);
+    files(MultiPathSource* paths) => project.files(*paths);
 }

@@ -36,9 +36,9 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
     
     file(PathSource path) => toPath(gproject.file(toJFile(path)));
     
-    files(MultiPathSource paths) 
+    files(MultiPathSource* paths) 
             => let(
-                   colOfJFiles = toPaths(paths).collect(toJFile),
+                   colOfJFiles = toPaths(*paths).collect(toJFile),
                    gfilecollection = gproject.files(JavaCollection(colOfJFiles))
                ) FileCollectionImpl(gfilecollection);
                      
@@ -65,9 +65,11 @@ shared Path toPath(PathSource|JFile path)
 
 shared JFile toJFile(PathSource path) => JFile(toPath(path).string);
        
-shared {Path*} toPaths(MultiPathSource paths) =>
-           if(is [BasicMultiPathSource*] paths) then paths.flatMap(toPaths)
-           else if(is FileCollection paths) then paths
-           else let(p = toPath(paths)) {p};
+shared {Path*} toPaths(MultiPathSource* paths) => paths.flatMap(
+           (mPath) => if(is [BasicMultiPathSource*] mPath) then mPath.flatMap(toPaths)
+           else if(is FileCollection mPath) then mPath
+           else {toPath(mPath)}
+       );
+          
 
 
