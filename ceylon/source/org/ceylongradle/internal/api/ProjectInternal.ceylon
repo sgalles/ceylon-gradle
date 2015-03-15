@@ -3,7 +3,8 @@ import ceylon.file {
     parsePath
 }
 import ceylon.interop.java {
-    javaClass
+    javaClass,
+    JavaCollection
 }
 
 import java.io {
@@ -13,7 +14,14 @@ import java.io {
 import org.ceylongradle.api {
     Project,
     PathSource,
-    BasicPathSource
+    MultiPathSource,
+    BasicMultiPathSource
+}
+import org.ceylongradle.api.file {
+    FileCollection
+}
+import org.ceylongradle.internal.api.file.collection {
+    FileCollectionImpl
 }
 import org.gradle.api {
     GProject=Project,
@@ -27,6 +35,13 @@ shared class ProjectInternal(shared GProject gproject) satisfies Project{
     buildDir => toPath(gproject.buildDir);
     
     file(PathSource path) => toPath(gproject.file(toJFile(path)));
+    
+    files(MultiPathSource paths) 
+            => let(
+                   colOfJFiles = toPaths(paths).collect(toJFile),
+                   gfilecollection = gproject.files(JavaCollection(colOfJFiles))
+               ) FileCollectionImpl(gfilecollection);
+                     
     
     shared void addRegistration<GTaskType>(String  name, void configure(GTaskType gtask))
             given GTaskType satisfies GTask{
@@ -49,4 +64,10 @@ shared Path toPath(PathSource|JFile path)
        
 
 shared JFile toJFile(PathSource path) => JFile(toPath(path).string);
+       
+shared {Path*} toPaths(MultiPathSource paths) =>
+           if(is [BasicMultiPathSource*] paths) then paths.flatMap(toPaths)
+           else if(is FileCollection paths) then paths
+           else let(p = toPath(paths)) {p};
+
 

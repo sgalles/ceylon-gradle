@@ -1,6 +1,7 @@
 import org.ceylongradle.api {
     Project,
-    PathSource
+    PathSource,
+    MultiPathSource
 }
 import org.ceylongradle.internal.api {
     ProjectInternal
@@ -25,4 +26,6 @@ shared abstract class AbstractScript(Object gProject) satisfies Project {
     buildDir => project.buildDir;
     
     file(PathSource path) => project.file(path);
+    
+    files(MultiPathSource paths) => project.files(paths);
 }

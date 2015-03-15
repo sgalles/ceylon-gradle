@@ -1,0 +1,1 @@
+interface CopySpec satisfies CopySourceSpec {}

@@ -5,9 +5,15 @@ import ceylon.file {
 import org.ceylongradle {
     AbstractScript
 }
+import org.ceylongradle.api.file {
+    FileCollection
+}
 import org.ceylongradle.internal.api {
     ProjectInternal,
     toJFile
+}
+import org.ceylongradle.internal.api.file.collection {
+    FileCollectionImpl
 }
 import org.gradle.api {
     GTask=Task,
@@ -20,6 +26,9 @@ import org.gradle.api.tasks.bundling {
 
 shared alias BasicPathSource => String|Path;
 shared alias PathSource => BasicPathSource|BasicPathSource();
+//shared alias BasicMultiPathSource => PathSource|Task|TaskOutputs;
+shared alias BasicMultiPathSource => PathSource;
+shared alias MultiPathSource => BasicMultiPathSource|[BasicMultiPathSource*]|FileCollection/*|[BasicMultiPathSource*]?()*/;
 
 shared interface Project {
     
@@ -27,7 +36,10 @@ shared interface Project {
     
     shared formal Path buildDir;
     
-    shared formal Path file(PathSource path);
+    shared formal Path file(PathSource path); 
+    
+    // ici FileCollection not imported => bug
+    shared formal FileCollection files(MultiPathSource paths);
     
     void addRegistrationInternal<GTaskType>(String  name, void configure(GTaskType gtask)) 
             given GTaskType satisfies GTask{
@@ -52,7 +64,7 @@ shared interface Project {
                 
                 shared new Zip(
                     String name, 
-                    PathSource from, 
+                    MultiPathSource from, 
                     String? baseName = null, 
                     PathSource? into = null,
                     PathSource? destinationDir = null
@@ -61,7 +73,9 @@ shared interface Project {
                         if(exists baseName){
                             gtask.baseName = baseName;
                         }
-                        gtask.from(toJFile(from));
+                        // TODO avoid case
+                        assert(is FileCollectionImpl f = files(from));
+                        gtask.from(f.delegate);
                         if(exists into) {
                             gtask.into(toJFile(into));
                         }
