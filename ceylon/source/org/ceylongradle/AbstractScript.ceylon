@@ -10,12 +10,11 @@ import org.gradle.api {
     GProject=Project
 }
 
-shared abstract class AbstractScript(Object gProject) satisfies Project {
+shared abstract class AbstractScript() satisfies Project {
    
     shared Project project;
     
-    assert(is GProject gProject);
-    value prjInt = ProjectInternal(gProject);
+    value prjInt = ProjectInternal(ProjectHolder.gProject);
     prjInt.task = prjInt.TaskHolder();
     project = prjInt;
     

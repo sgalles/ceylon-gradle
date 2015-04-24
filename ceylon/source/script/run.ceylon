@@ -3,7 +3,7 @@ import org.ceylongradle {
 }
 
 
-shared  class Script(Object gProject) extends AbstractScript(gProject){
+shared  class Script() extends AbstractScript(){
     
     
     
@@ -31,5 +31,5 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
 }
 
 shared void run(){
-    print("helllo@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+    Script().execute();
 }
