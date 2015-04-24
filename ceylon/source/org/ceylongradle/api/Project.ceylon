@@ -62,7 +62,7 @@ shared interface Project {
             
             shared class Zip extends DefaultTask {
                 
-                shared new Zip(
+                shared new (
                     String name, 
                     MultiPathSource from, 
                     String? baseName = null, 

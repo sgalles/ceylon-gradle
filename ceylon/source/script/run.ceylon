@@ -30,3 +30,6 @@ shared  class Script(Object gProject) extends AbstractScript(gProject){
     
 }
 
+shared void run(){
+    print("helllo@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+}

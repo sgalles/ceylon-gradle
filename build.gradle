@@ -1,4 +1,5 @@
 
+
 // add Ceylon module to Gradle classpath
 buildscript {    
     dependencies {
@@ -8,17 +9,27 @@ buildscript {
        def subDir = file('ceylon')
        def sep = System.properties['path.separator']
        def batOrSh = ( sep == ';' ? 'bat' : 'sh' )
-       def classpathString = "ceylon.$batOrSh classpath $module".execute(null,subDir).text
+       //def classpathString = "ceylon.$batOrSh classpath $module".execute(null,subDir).text
+       def classpathString = "ceylon.$batOrSh classpath ceylon.language/1.1.1".execute(null,subDir).text
        // init Gradle classpath
        classpath files(classpathString.split(sep))
-       System.properties['java.class.path'] += "$sep$classpathString"
+       //System.properties['java.class.path'] += "$sep$classpathString"
     }
 }
 
-// execute Ceylon script
-com.redhat.ceylon.compiler.java.runtime.Main.setupMetamodel(moduleName, moduleVersion)
-new script.Script(project).execute()
+import com.redhat.ceylon.compiler.java.runtime.tools.*
 
+ JavaRunnerOptions options = new  JavaRunnerOptions();
+        //options.setDelegateClassLoader(project.getBuildscript().getClassLoader())
+        options.addUserRepository("${file('ceylon/modules')}");
+        String module = "script";
+        String version = "1.0.0";
 
-
+        Runner jvmRunner = CeylonToolProvider.getRunner(Backend.Java, options, module, version);
+        try{
+            jvmRunner.run();
+        }finally{
+            // make sure we release the classloader
+            jvmRunner.cleanup();
+        }
 
