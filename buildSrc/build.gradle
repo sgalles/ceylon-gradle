@@ -14,9 +14,10 @@ dependencies {
 build.dependsOn 'buildCeylon'
 
 task buildCeylon(type:Exec){
+    inputs.dir("$subDir/source")
+    outputs.dir("$subDir/modules")
     
     workingDir subDir
     commandLine  "ceylon.$batOrSh", 'compile'
-    
 }
 
