@@ -1,0 +1,22 @@
+
+def moduleName = 'script'
+def moduleVersion = '1.0.0'
+def module = "$moduleName/$moduleVersion"
+def subDir = file('../ceylon')
+def sep = System.properties['path.separator']
+def batOrSh = ( sep == ';' ? 'bat' : 'sh' )
+def classpathString = "ceylon.$batOrSh classpath $module".execute(null,subDir).text
+
+dependencies {
+    runtime files(classpathString.split(sep))
+}
+
+build.dependsOn 'buildCeylon'
+
+task buildCeylon(type:Exec){
+    
+    workingDir subDir
+    commandLine  "ceylon.$batOrSh", 'compile'
+    
+}
+

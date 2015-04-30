@@ -1,35 +1,16 @@
 
 
 
-// add Ceylon module to Gradle classpath
-buildscript {    
-    dependencies {
-      
-       project.ext.moduleName = 'script'
-       project.ext.moduleVersion = '1.0.0'
-       def module = "$project.moduleName/$project.moduleVersion"
-       def subDir = file('ceylon')
-       def sep = System.properties['path.separator']
-       def batOrSh = ( sep == ';' ? 'bat' : 'sh' )
-       
-       //execute("ceylon.$batOrSh compile", subDir)
-       project.ant{
-            exec(executable:"ceylon.$batOrSh",searchpath:'true',dir:subDir,failonerror:'true'){
-                arg(value:'compile')
-            }
-       }
-       
-       def classpathString = "ceylon.$batOrSh classpath $module".execute(null,subDir).text
-       classpath files(classpathString.split(sep))
-    }
-}
 
 import com.redhat.ceylon.compiler.java.runtime.tools.*
 import org.ceylongradle.ProjectHolder
 
+def moduleName = 'script'
+def moduleVersion = '1.0.0'
+
 JavaRunnerOptions options = new  JavaRunnerOptions();
 options.addUserRepository("${file('ceylon/modules')}");
-Runner jvmRunner = CeylonToolProvider.getRunner(Backend.Java, options, project.moduleName , project.moduleVersion);
+Runner jvmRunner = CeylonToolProvider.getRunner(Backend.Java, options, moduleName , moduleVersion);
 try{
     ProjectHolder.gProject = project
     jvmRunner.run();
