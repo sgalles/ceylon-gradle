@@ -2,7 +2,7 @@ This is an experiment to use Ceylon to write Gradle scripts.
 
 State of this project
 --------------------
-This was a simple experiment but basically I won't work on this anymore as there are better way to integrate Gradle+Ceylon, arguably using the Gradle embeddable API for instance
+Not usable. This was a simple experiment but basically I won't work on this anymore as there are better way to integrate Gradle+Ceylon, arguably using the Gradle embeddable API for instance
 
 Description
 --------------------
